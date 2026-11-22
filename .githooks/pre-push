@@ -6,15 +6,15 @@ fi
 
 echo "==> Validating solution compilation before push..."
 
-dotnet build src/Klario/Klario.PL/Klario.PL.csproj -c Release
+dotnet build src/Orbit/Orbit.PL/Orbit.PL.csproj -c Release
 if [ $? -ne 0 ]; then
-    echo "ERROR: Klario.PL build failed! Push aborted."
+    echo "ERROR: Orbit.PL build failed! Push aborted."
     exit 1
 fi
 
-dotnet build src/Klario/Klario.Console/Klario.Console.csproj -c Release
+dotnet build src/Orbit/Orbit.Console/Orbit.Console.csproj -c Release
 if [ $? -ne 0 ]; then
-    echo "ERROR: Klario.Console build failed! Push aborted."
+    echo "ERROR: Orbit.Console build failed! Push aborted."
     exit 1
 fi
 
