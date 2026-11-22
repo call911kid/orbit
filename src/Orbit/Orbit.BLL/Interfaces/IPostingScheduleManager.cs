@@ -1,6 +1,6 @@
-using Klario.Common.Enums;
+using Orbit.Common.Enums;
 
-namespace Klario.BLL.Interfaces;
+namespace Orbit.BLL.Interfaces;
 
 public interface IPostingScheduleManager
 {

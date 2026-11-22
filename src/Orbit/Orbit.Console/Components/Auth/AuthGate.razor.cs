@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Klario.Console.Services;
+using Orbit.Console.Services;
 
-namespace Klario.Console.Components.Auth;
+namespace Orbit.Console.Components.Auth;
 
 public partial class AuthGate : ComponentBase, IDisposable
 {
@@ -37,11 +37,11 @@ public partial class AuthGate : ComponentBase, IDisposable
             {
                 if (State.RememberKey)
                 {
-                    await ProtectedLocalStorage.SetAsync("klario_secret_key", State.SecretKey);
+                    await ProtectedLocalStorage.SetAsync("orbit_secret_key", State.SecretKey);
                 }
                 else
                 {
-                    await ProtectedLocalStorage.DeleteAsync("klario_secret_key");
+                    await ProtectedLocalStorage.DeleteAsync("orbit_secret_key");
                 }
             }
             catch

@@ -1,7 +1,7 @@
 using System;
-using Klario.Common.Enums;
+using Orbit.Common.Enums;
 
-namespace Klario.DAL.Models;
+namespace Orbit.DAL.Models;
 
 public class Schedule
 {

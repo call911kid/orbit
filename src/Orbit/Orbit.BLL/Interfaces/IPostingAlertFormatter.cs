@@ -1,6 +1,6 @@
-using Klario.Providers.Contracts;
+using Orbit.Providers.Contracts;
 
-namespace Klario.BLL.Interfaces;
+namespace Orbit.BLL.Interfaces;
 
 public interface IPostingAlertFormatter
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Klario.PL.Responses
+namespace Orbit.PL.Responses
 {
     public class ApiResponse
     {

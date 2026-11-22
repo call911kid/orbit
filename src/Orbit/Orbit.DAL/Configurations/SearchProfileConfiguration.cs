@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Klario.DAL.Models;
+using Orbit.DAL.Models;
 
-namespace Klario.DAL.Configurations;
+namespace Orbit.DAL.Configurations;
 
 public class SearchProfileConfiguration : IEntityTypeConfiguration<SearchProfile>
 {

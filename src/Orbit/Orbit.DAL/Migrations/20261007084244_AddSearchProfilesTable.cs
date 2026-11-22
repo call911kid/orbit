@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Klario.DAL.Migrations
+namespace Orbit.DAL.Migrations
 {
     /// <inheritdoc />
     public partial class AddSearchProfilesTable : Migration

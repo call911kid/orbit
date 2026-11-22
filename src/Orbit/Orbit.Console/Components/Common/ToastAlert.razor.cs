@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
-using Klario.Console.Services;
+using Orbit.Console.Services;
 
-namespace Klario.Console.Components.Common;
+namespace Orbit.Console.Components.Common;
 
 public partial class ToastAlert : ComponentBase, IDisposable
 {

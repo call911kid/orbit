@@ -1,4 +1,4 @@
-namespace Klario.PL.Constants;
+namespace Orbit.PL.Constants;
 
 public static class ErrorCodes
 {

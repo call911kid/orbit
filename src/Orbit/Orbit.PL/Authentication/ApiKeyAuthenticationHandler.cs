@@ -1,15 +1,15 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using Klario.PL.Configuration;
-using Klario.PL.Constants;
-using Klario.PL.Responses;
+using Orbit.PL.Configuration;
+using Orbit.PL.Constants;
+using Orbit.PL.Responses;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Klario.PL.Authentication;
+namespace Orbit.PL.Authentication;
 
 public class ApiKeyAuthenticationOptions : AuthenticationSchemeOptions
 {

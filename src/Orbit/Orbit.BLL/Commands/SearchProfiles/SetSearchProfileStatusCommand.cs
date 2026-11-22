@@ -1,12 +1,12 @@
 using FluentValidation;
-using Klario.BLL.Exceptions;
-using Klario.BLL.Interfaces;
-using Klario.DAL.Context;
-using Klario.DAL.Models;
+using Orbit.BLL.Exceptions;
+using Orbit.BLL.Interfaces;
+using Orbit.DAL.Context;
+using Orbit.DAL.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Commands.SearchProfiles;
+namespace Orbit.BLL.Commands.SearchProfiles;
 
 public sealed record SetSearchProfileStatusCommand(
     Guid Id,
@@ -15,11 +15,11 @@ public sealed record SetSearchProfileStatusCommand(
 
 public class SetSearchProfileStatusCommandHandler : IRequestHandler<SetSearchProfileStatusCommand>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
     private readonly IPostingScheduleManager _scheduleManager;
 
     public SetSearchProfileStatusCommandHandler(
-        KlarioDbContext context,
+        OrbitDbContext context,
         IPostingScheduleManager scheduleManager)
     {
         _context = context;

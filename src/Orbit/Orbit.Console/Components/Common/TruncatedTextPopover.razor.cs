@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace Klario.Console.Components.Common;
+namespace Orbit.Console.Components.Common;
 
 public partial class TruncatedTextPopover : ComponentBase
 {

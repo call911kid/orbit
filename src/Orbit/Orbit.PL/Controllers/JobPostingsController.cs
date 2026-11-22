@@ -1,15 +1,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Klario.BLL.Queries.JobPostings;
-using Klario.Common.Enums;
-using Klario.Common.Pagination;
-using Klario.PL.Responses;
+using Orbit.BLL.Queries.JobPostings;
+using Orbit.Common.Enums;
+using Orbit.Common.Pagination;
+using Orbit.PL.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Klario.PL.Controllers;
+namespace Orbit.PL.Controllers;
 
 [Authorize]
 [ApiController]

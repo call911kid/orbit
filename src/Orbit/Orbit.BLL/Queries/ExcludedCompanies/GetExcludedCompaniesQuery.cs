@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Klario.DAL.Context;
+using Orbit.DAL.Context;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Queries.ExcludedCompanies;
+namespace Orbit.BLL.Queries.ExcludedCompanies;
 
 public record GetExcludedCompaniesQuery : IRequest<List<ExcludedCompanyResponse>>;
 
@@ -19,9 +19,9 @@ public sealed record ExcludedCompanyResponse(
 
 public class GetExcludedCompaniesQueryHandler : IRequestHandler<GetExcludedCompaniesQuery, List<ExcludedCompanyResponse>>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
 
-    public GetExcludedCompaniesQueryHandler(KlarioDbContext context)
+    public GetExcludedCompaniesQueryHandler(OrbitDbContext context)
     {
         _context = context;
     }

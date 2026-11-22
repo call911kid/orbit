@@ -1,9 +1,9 @@
-using Klario.Common.Enums;
-using Klario.DAL.Context;
+using Orbit.Common.Enums;
+using Orbit.DAL.Context;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Queries.JobPostings;
+namespace Orbit.BLL.Queries.JobPostings;
 
 public record GetExistingJobPostingIdsQuery(
     PostingSource Source,
@@ -12,9 +12,9 @@ public record GetExistingJobPostingIdsQuery(
 
 public class GetExistingJobPostingIdsQueryHandler : IRequestHandler<GetExistingJobPostingIdsQuery, HashSet<string>>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
 
-    public GetExistingJobPostingIdsQueryHandler(KlarioDbContext context)
+    public GetExistingJobPostingIdsQueryHandler(OrbitDbContext context)
     {
         _context = context;
     }

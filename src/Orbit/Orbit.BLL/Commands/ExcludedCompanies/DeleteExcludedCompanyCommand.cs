@@ -2,21 +2,21 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using Klario.BLL.Exceptions;
-using Klario.DAL.Context;
-using Klario.DAL.Models;
+using Orbit.BLL.Exceptions;
+using Orbit.DAL.Context;
+using Orbit.DAL.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Commands.ExcludedCompanies;
+namespace Orbit.BLL.Commands.ExcludedCompanies;
 
 public record DeleteExcludedCompanyCommand(Guid Id) : IRequest<bool>;
 
 public class DeleteExcludedCompanyCommandHandler : IRequestHandler<DeleteExcludedCompanyCommand, bool>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
 
-    public DeleteExcludedCompanyCommandHandler(KlarioDbContext context)
+    public DeleteExcludedCompanyCommandHandler(OrbitDbContext context)
     {
         _context = context;
     }

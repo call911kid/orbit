@@ -2,20 +2,20 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using Klario.DAL.Context;
-using Klario.DAL.Models;
+using Orbit.DAL.Context;
+using Orbit.DAL.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Commands.ExcludedCompanies;
+namespace Orbit.BLL.Commands.ExcludedCompanies;
 
 public record CreateExcludedCompanyCommand(string Name) : IRequest<Guid>;
 
 public class CreateExcludedCompanyCommandHandler : IRequestHandler<CreateExcludedCompanyCommand, Guid>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
 
-    public CreateExcludedCompanyCommandHandler(KlarioDbContext context)
+    public CreateExcludedCompanyCommandHandler(OrbitDbContext context)
     {
         _context = context;
     }

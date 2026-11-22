@@ -1,12 +1,12 @@
 using AutoMapper;
-using Klario.BLL.Exceptions;
-using Klario.Common.Enums;
-using Klario.DAL.Context;
-using Klario.DAL.Models;
+using Orbit.BLL.Exceptions;
+using Orbit.Common.Enums;
+using Orbit.DAL.Context;
+using Orbit.DAL.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Queries.SearchProfiles;
+namespace Orbit.BLL.Queries.SearchProfiles;
 
 public record GetSearchProfileByIdQuery(Guid Id) : IRequest<GetSearchProfileByIdResponse>;
 
@@ -35,10 +35,10 @@ public sealed record GetSearchProfileByIdScheduleResponse(
 
 public class GetSearchProfileByIdQueryHandler : IRequestHandler<GetSearchProfileByIdQuery, GetSearchProfileByIdResponse>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetSearchProfileByIdQueryHandler(KlarioDbContext context, IMapper mapper)
+    public GetSearchProfileByIdQueryHandler(OrbitDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;

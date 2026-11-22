@@ -139,7 +139,7 @@
         }
     }
 
-    window.initKlarioTopography = function (canvasId, options = {}) {
+    window.initOrbitTopography = function (canvasId, options = {}) {
         const canvas = document.getElementById(canvasId);
         if (!canvas) return false;
 
@@ -157,7 +157,7 @@
         return true;
     };
 
-    window.destroyKlarioTopography = function (canvasId) {
+    window.destroyOrbitTopography = function (canvasId) {
         if (activeTopos.has(canvasId)) {
             activeTopos.get(canvasId).stop();
             activeTopos.delete(canvasId);
@@ -169,7 +169,7 @@
     function autoInit() {
         document.querySelectorAll('canvas[data-topo-canvas]').forEach(function (canvas) {
             if (canvas.id) {
-                window.initKlarioTopography(canvas.id);
+                window.initOrbitTopography(canvas.id);
             }
         });
     }

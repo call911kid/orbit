@@ -1,7 +1,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.DAL.Extensions;
+namespace Orbit.DAL.Extensions;
 
 public static class DbUpdateExceptionExtensions
 {

@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using Klario.Common.Enums;
-using Klario.Console.Models;
-using Klario.Console.Services;
+using Orbit.Common.Enums;
+using Orbit.Console.Models;
+using Orbit.Console.Services;
 
-namespace Klario.Console.Components.Profiles;
+namespace Orbit.Console.Components.Profiles;
 
 public partial class ChannelEditor : ComponentBase, IDisposable
 {
@@ -49,7 +49,7 @@ public partial class ChannelEditor : ComponentBase, IDisposable
         {
             try
             {
-                await JS.InvokeVoidAsync("initKlarioTopography", "emptyWorkbenchCanvas");
+                await JS.InvokeVoidAsync("initOrbitTopography", "emptyWorkbenchCanvas");
             }
             catch
             {

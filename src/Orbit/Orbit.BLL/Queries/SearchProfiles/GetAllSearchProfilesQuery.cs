@@ -1,10 +1,10 @@
 using AutoMapper;
-using Klario.Common.Enums;
-using Klario.DAL.Context;
+using Orbit.Common.Enums;
+using Orbit.DAL.Context;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Queries.SearchProfiles;
+namespace Orbit.BLL.Queries.SearchProfiles;
 
 public record GetAllSearchProfilesQuery : IRequest<List<GetAllSearchProfilesResponse>>;
 
@@ -33,10 +33,10 @@ public sealed record GetAllSearchProfilesScheduleResponse(
 
 public class GetAllSearchProfilesQueryHandler : IRequestHandler<GetAllSearchProfilesQuery, List<GetAllSearchProfilesResponse>>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetAllSearchProfilesQueryHandler(KlarioDbContext context, IMapper mapper)
+    public GetAllSearchProfilesQueryHandler(OrbitDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;

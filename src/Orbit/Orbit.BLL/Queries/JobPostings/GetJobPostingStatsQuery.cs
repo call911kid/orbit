@@ -2,11 +2,11 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Klario.DAL.Context;
+using Orbit.DAL.Context;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Queries.JobPostings;
+namespace Orbit.BLL.Queries.JobPostings;
 
 public record GetJobPostingStatsQuery : IRequest<JobPostingStatsResponse>;
 
@@ -14,9 +14,9 @@ public sealed record JobPostingStatsResponse(int TodayCount, int WeekCount, int 
 
 public class GetJobPostingStatsQueryHandler : IRequestHandler<GetJobPostingStatsQuery, JobPostingStatsResponse>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
 
-    public GetJobPostingStatsQueryHandler(KlarioDbContext context)
+    public GetJobPostingStatsQueryHandler(OrbitDbContext context)
     {
         _context = context;
     }

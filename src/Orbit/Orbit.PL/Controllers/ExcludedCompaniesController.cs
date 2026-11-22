@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Klario.BLL.Commands.ExcludedCompanies;
-using Klario.BLL.Queries.ExcludedCompanies;
-using Klario.PL.Contracts.ExcludedCompanies;
-using Klario.PL.Responses;
+using Orbit.BLL.Commands.ExcludedCompanies;
+using Orbit.BLL.Queries.ExcludedCompanies;
+using Orbit.PL.Contracts.ExcludedCompanies;
+using Orbit.PL.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Klario.PL.Controllers;
+namespace Orbit.PL.Controllers;
 
 [Authorize]
 [ApiController]

@@ -1,9 +1,9 @@
-using Klario.Common.Enums;
-using Klario.DAL.Context;
+using Orbit.Common.Enums;
+using Orbit.DAL.Context;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Queries.Schedules;
+namespace Orbit.BLL.Queries.Schedules;
 
 public sealed record GetActiveSchedulesQuery : IRequest<List<ActiveScheduleResponse>>;
 
@@ -15,9 +15,9 @@ public sealed record ActiveScheduleResponse(
 
 public sealed class GetActiveSchedulesQueryHandler : IRequestHandler<GetActiveSchedulesQuery, List<ActiveScheduleResponse>>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
 
-    public GetActiveSchedulesQueryHandler(KlarioDbContext context)
+    public GetActiveSchedulesQueryHandler(OrbitDbContext context)
     {
         _context = context;
     }

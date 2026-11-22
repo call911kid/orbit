@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Klario.Console.Services;
+using Orbit.Console.Services;
 
-namespace Klario.Console.Components.Layout;
+namespace Orbit.Console.Components.Layout;
 
 public partial class ConsoleHeader : ComponentBase, IDisposable
 {
@@ -20,7 +20,7 @@ public partial class ConsoleHeader : ComponentBase, IDisposable
     {
         try
         {
-            await ProtectedLocalStorage.DeleteAsync("klario_secret_key");
+            await ProtectedLocalStorage.DeleteAsync("orbit_secret_key");
         }
         catch
         {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
-using Klario.Console.Services;
+using Orbit.Console.Services;
 
-namespace Klario.Console.Components.Profiles;
+namespace Orbit.Console.Components.Profiles;
 
 public partial class ChannelList : ComponentBase, IDisposable
 {

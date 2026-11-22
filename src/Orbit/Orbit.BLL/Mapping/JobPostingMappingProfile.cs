@@ -1,8 +1,8 @@
 using AutoMapper;
-using Klario.DAL.Models;
-using Klario.Providers.Contracts;
+using Orbit.DAL.Models;
+using Orbit.Providers.Contracts;
 
-namespace Klario.BLL.Mapping;
+namespace Orbit.BLL.Mapping;
 
 public class JobPostingMappingProfile : Profile
 {

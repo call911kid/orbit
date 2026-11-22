@@ -1,4 +1,4 @@
-namespace Klario.PL.Configuration;
+namespace Orbit.PL.Configuration;
 
 public sealed class HangfireOptions
 {

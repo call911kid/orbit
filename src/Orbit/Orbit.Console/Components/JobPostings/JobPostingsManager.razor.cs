@@ -4,16 +4,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using Klario.Common.Enums;
-using Klario.Console.Models;
-using Klario.Console.Services;
+using Orbit.Common.Enums;
+using Orbit.Console.Models;
+using Orbit.Console.Services;
 
-namespace Klario.Console.Components.JobPostings;
+namespace Orbit.Console.Components.JobPostings;
 
 public partial class JobPostingsManager : ComponentBase, IDisposable
 {
     [Inject] private ConsoleState State { get; set; } = default!;
-    [Inject] private KlarioApiClient ApiClient { get; set; } = default!;
+    [Inject] private OrbitApiClient ApiClient { get; set; } = default!;
     [Inject] private IJSRuntime JS { get; set; } = default!;
 
     private List<JobPostingDto> jobItems = [];

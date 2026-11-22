@@ -1,6 +1,6 @@
 using System;
 
-namespace Klario.DAL.Models;
+namespace Orbit.DAL.Models;
 
 public class ExcludedCompany : BaseEntity
 {

@@ -1,9 +1,9 @@
 using System.Collections.Concurrent;
 using HtmlAgilityPack;
-using Klario.Common.Enums;
-using Klario.Providers.Contracts;
+using Orbit.Common.Enums;
+using Orbit.Providers.Contracts;
 
-namespace Klario.Providers.LinkedIn;
+namespace Orbit.Providers.LinkedIn;
 
 public class LinkedInProvider : IPostingProvider
 {

@@ -1,22 +1,22 @@
 using FluentValidation;
-using Klario.BLL.Exceptions;
-using Klario.BLL.Interfaces;
-using Klario.DAL.Context;
-using Klario.DAL.Models;
+using Orbit.BLL.Exceptions;
+using Orbit.BLL.Interfaces;
+using Orbit.DAL.Context;
+using Orbit.DAL.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Commands.SearchProfiles;
+namespace Orbit.BLL.Commands.SearchProfiles;
 
 public record DeleteSearchProfileCommand(Guid Id) : IRequest<bool>;
 
 public class DeleteSearchProfileCommandHandler : IRequestHandler<DeleteSearchProfileCommand, bool>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
     private readonly IPostingScheduleManager _scheduleManager;
 
     public DeleteSearchProfileCommandHandler(
-        KlarioDbContext context,
+        OrbitDbContext context,
         IPostingScheduleManager scheduleManager)
     {
         _context = context;

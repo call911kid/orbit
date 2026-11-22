@@ -2,13 +2,13 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Klario.Common.Enums;
-using Klario.Common.Pagination;
-using Klario.Console.Models;
+using Orbit.Common.Enums;
+using Orbit.Common.Pagination;
+using Orbit.Console.Models;
 
-namespace Klario.Console.Services;
+namespace Orbit.Console.Services;
 
-public sealed class KlarioApiClient
+public sealed class OrbitApiClient
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -17,7 +17,7 @@ public sealed class KlarioApiClient
         Converters = { new JsonStringEnumConverter() }
     };
 
-    public KlarioApiClient(IHttpClientFactory httpClientFactory)
+    public OrbitApiClient(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
     }

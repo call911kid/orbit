@@ -1,10 +1,10 @@
 using Hangfire.Client;
 using Hangfire.Common;
 using Hangfire.Storage;
-using Klario.Common.Enums;
-using Klario.PL.Services;
+using Orbit.Common.Enums;
+using Orbit.PL.Services;
 
-namespace Klario.PL.Filters;
+namespace Orbit.PL.Filters;
 
 public sealed class SkipIfRecentlyExecutedAttribute : JobFilterAttribute, IClientFilter
 {

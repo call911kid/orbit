@@ -1,9 +1,9 @@
 using System.Net;
 using System.Text;
-using Klario.BLL.Interfaces;
-using Klario.Providers.Contracts;
+using Orbit.BLL.Interfaces;
+using Orbit.Providers.Contracts;
 
-namespace Klario.BLL.Services;
+namespace Orbit.BLL.Services;
 
 public class TelegramPostingAlertFormatter : IPostingAlertFormatter
 {

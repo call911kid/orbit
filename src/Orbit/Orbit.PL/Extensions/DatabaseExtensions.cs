@@ -1,7 +1,7 @@
-using Klario.DAL.Context;
+using Orbit.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.PL.Extensions;
+namespace Orbit.PL.Extensions;
 
 public static class DatabaseExtensions
 {
@@ -13,7 +13,7 @@ public static class DatabaseExtensions
 
         try
         {
-            var dbContext = services.GetRequiredService<KlarioDbContext>();
+            var dbContext = services.GetRequiredService<OrbitDbContext>();
 
             logger.LogInformation("Acquiring database migration lock...");
             await dbContext.Database.OpenConnectionAsync();
@@ -21,7 +21,7 @@ public static class DatabaseExtensions
             try
             {
                 await dbContext.Database.ExecuteSqlRawAsync(
-                    "EXEC sp_getapplock @Resource = 'KlarioDbMigration', @LockMode = 'Exclusive', @LockOwner = 'Session', @LockTimeout = 120000;");
+                    "EXEC sp_getapplock @Resource = 'OrbitDbMigration', @LockMode = 'Exclusive', @LockOwner = 'Session', @LockTimeout = 120000;");
 
                 logger.LogInformation("Migration lock acquired. Applying pending database migrations...");
                 await dbContext.Database.MigrateAsync();
@@ -32,7 +32,7 @@ public static class DatabaseExtensions
                 try
                 {
                     await dbContext.Database.ExecuteSqlRawAsync(
-                        "EXEC sp_releaseapplock @Resource = 'KlarioDbMigration', @LockOwner = 'Session';");
+                        "EXEC sp_releaseapplock @Resource = 'OrbitDbMigration', @LockOwner = 'Session';");
                 }
                 catch (Exception releaseEx)
                 {

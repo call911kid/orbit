@@ -1,13 +1,13 @@
 using FluentValidation;
-using Klario.BLL.Exceptions;
-using Klario.BLL.Interfaces;
-using Klario.Common.Enums;
-using Klario.DAL.Context;
-using Klario.DAL.Models;
+using Orbit.BLL.Exceptions;
+using Orbit.BLL.Interfaces;
+using Orbit.Common.Enums;
+using Orbit.DAL.Context;
+using Orbit.DAL.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Commands.Schedules;
+namespace Orbit.BLL.Commands.Schedules;
 
 public sealed record RemoveScheduleCommand(
     Guid SearchProfileId,
@@ -16,11 +16,11 @@ public sealed record RemoveScheduleCommand(
 
 public class RemoveScheduleCommandHandler : IRequestHandler<RemoveScheduleCommand>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
     private readonly IPostingScheduleManager _scheduleManager;
 
     public RemoveScheduleCommandHandler(
-        KlarioDbContext context,
+        OrbitDbContext context,
         IPostingScheduleManager scheduleManager)
     {
         _context = context;

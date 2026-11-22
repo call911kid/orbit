@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Klario.Common.Pagination;
+namespace Orbit.Common.Pagination;
 
 public sealed record PagedResponse<T>(
     IReadOnlyList<T> Items,

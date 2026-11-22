@@ -1,4 +1,4 @@
-namespace Klario.Common.Enums
+namespace Orbit.Common.Enums
 {
     [Flags]
     public enum WorkplacePreference

@@ -1,12 +1,12 @@
 using Hangfire;
 using Hangfire.SqlServer;
-using Klario.BLL.Interfaces;
-using Klario.PL.Services;
+using Orbit.BLL.Interfaces;
+using Orbit.PL.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Klario.PL.Extensions;
+namespace Orbit.PL.Extensions;
 
 public static class HangfireExtensions
 {

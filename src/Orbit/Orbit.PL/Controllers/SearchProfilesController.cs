@@ -1,13 +1,13 @@
 using AutoMapper;
-using Klario.BLL.Commands.SearchProfiles;
-using Klario.BLL.Queries.SearchProfiles;
-using Klario.PL.Contracts.SearchProfiles;
-using Klario.PL.Responses;
+using Orbit.BLL.Commands.SearchProfiles;
+using Orbit.BLL.Queries.SearchProfiles;
+using Orbit.PL.Contracts.SearchProfiles;
+using Orbit.PL.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Klario.PL.Controllers;
+namespace Orbit.PL.Controllers;
 
 [Authorize]
 [ApiController]

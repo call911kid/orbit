@@ -1,4 +1,4 @@
-namespace Klario.BLL.Interfaces;
+namespace Orbit.BLL.Interfaces;
 
 public interface ITelegramService
 {

@@ -1,13 +1,13 @@
 using Hangfire;
 using Hangfire.Storage;
-using Klario.BLL.Interfaces;
-using Klario.BLL.Orchestrators;
-using Klario.BLL.Queries.Schedules;
-using Klario.Common.Enums;
-using Klario.PL.Filters;
+using Orbit.BLL.Interfaces;
+using Orbit.BLL.Orchestrators;
+using Orbit.BLL.Queries.Schedules;
+using Orbit.Common.Enums;
+using Orbit.PL.Filters;
 using MediatR;
 
-namespace Klario.PL.Services;
+namespace Orbit.PL.Services;
 
 public class HangfirePostingScheduleManager : IPostingScheduleManager
 {

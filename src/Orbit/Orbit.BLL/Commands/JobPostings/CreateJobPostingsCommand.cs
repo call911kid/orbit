@@ -1,13 +1,13 @@
 using AutoMapper;
 using FluentValidation;
-using Klario.DAL.Context;
-using Klario.DAL.Extensions;
-using Klario.DAL.Models;
-using Klario.Providers.Contracts;
+using Orbit.DAL.Context;
+using Orbit.DAL.Extensions;
+using Orbit.DAL.Models;
+using Orbit.Providers.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Commands.JobPostings;
+namespace Orbit.BLL.Commands.JobPostings;
 
 public record CreateJobPostingsCommand(
     IReadOnlyList<ExternalPosting> Postings
@@ -15,10 +15,10 @@ public record CreateJobPostingsCommand(
 
 public class CreateJobPostingsCommandHandler : IRequestHandler<CreateJobPostingsCommand, IReadOnlyList<ExternalPosting>>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
     private readonly IMapper _mapper;
 
-    public CreateJobPostingsCommandHandler(KlarioDbContext context, IMapper mapper)
+    public CreateJobPostingsCommandHandler(OrbitDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;

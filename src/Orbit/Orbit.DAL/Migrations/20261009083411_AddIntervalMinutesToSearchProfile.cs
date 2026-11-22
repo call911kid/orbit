@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Klario.DAL.Migrations
+namespace Orbit.DAL.Migrations
 {
     /// <inheritdoc />
     public partial class AddIntervalMinutesToSearchProfile : Migration

@@ -1,12 +1,12 @@
 using FluentValidation;
-using Klario.BLL.Exceptions;
-using Klario.DAL.Context;
-using Klario.Common.Enums;
-using Klario.DAL.Models;
+using Orbit.BLL.Exceptions;
+using Orbit.DAL.Context;
+using Orbit.Common.Enums;
+using Orbit.DAL.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Commands.SearchProfiles;
+namespace Orbit.BLL.Commands.SearchProfiles;
 
 public record UpdateSearchProfileCommand(
     Guid Id,
@@ -24,9 +24,9 @@ public record UpdateSearchProfileCommand(
 
 public class UpdateSearchProfileCommandHandler : IRequestHandler<UpdateSearchProfileCommand>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
 
-    public UpdateSearchProfileCommandHandler(KlarioDbContext context)
+    public UpdateSearchProfileCommandHandler(OrbitDbContext context)
     {
         _context = context;
     }

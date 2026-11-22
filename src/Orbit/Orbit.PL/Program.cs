@@ -1,16 +1,16 @@
 using AutoMapper;
 using Hangfire;
-using Klario.BLL.DI;
-using Klario.BLL.Interfaces;
-using Klario.BLL.Services;
-using Klario.DAL.Context;
-using Klario.PL.Authentication;
-using Klario.PL.Configuration;
-using Klario.Console.Extensions;
-using Klario.PL.Extensions;
-using Klario.PL.Middleware;
-using Klario.PL.Services;
-using Klario.Providers.DI;
+using Orbit.BLL.DI;
+using Orbit.BLL.Interfaces;
+using Orbit.BLL.Services;
+using Orbit.DAL.Context;
+using Orbit.PL.Authentication;
+using Orbit.PL.Configuration;
+using Orbit.Console.Extensions;
+using Orbit.PL.Extensions;
+using Orbit.PL.Middleware;
+using Orbit.PL.Services;
+using Orbit.Providers.DI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Text.Json.Serialization;
@@ -35,7 +35,7 @@ builder.Services.AddControllers()
     });
 
 // Register DbContext
-builder.Services.AddDbContext<KlarioDbContext>(options =>
+builder.Services.AddDbContext<OrbitDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     options.ConfigureWarnings(warnings => warnings.Log(RelationalEventId.PendingModelChangesWarning));
@@ -45,13 +45,13 @@ builder.Services.AddDbContext<KlarioDbContext>(options =>
 builder.Services.AddBusinessLogic();
 
 // Register AutoMapper
-builder.Services.AddAutoMapper(cfg => { }, typeof(Klario.BLL.DI.DependencyInjection).Assembly, typeof(Program).Assembly);
+builder.Services.AddAutoMapper(cfg => { }, typeof(Orbit.BLL.DI.DependencyInjection).Assembly, typeof(Program).Assembly);
 
 // Register Posting Providers
 builder.Services.AddLinkedInProvider();
 
-// Register Klario Console
-builder.Services.AddKlarioConsole();
+// Register Orbit Console
+builder.Services.AddOrbitConsole();
 
 builder.Services.AddHangfireInfrastructure(builder.Configuration);
 
@@ -98,7 +98,7 @@ app.UseAntiforgery();
 
 app.MapGet("/api/health", () => Results.Ok("Healthy")).AllowAnonymous();
 app.MapControllers();
-app.MapKlarioConsole();
+app.MapOrbitConsole();
 
 await app.MigrateDatabaseAsync();
 await app.SyncHangfireSchedulesAsync();

@@ -3,13 +3,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using Klario.Common.Enums;
-using Klario.Common.Pagination;
-using Klario.DAL.Context;
+using Orbit.Common.Enums;
+using Orbit.Common.Pagination;
+using Orbit.DAL.Context;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Queries.JobPostings;
+namespace Orbit.BLL.Queries.JobPostings;
 
 public record GetJobPostingsQuery(
     PagingQuery Paging,
@@ -34,9 +34,9 @@ public sealed record GetJobPostingsResponse(
 
 public class GetJobPostingsQueryHandler : IRequestHandler<GetJobPostingsQuery, PagedResponse<GetJobPostingsResponse>>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
 
-    public GetJobPostingsQueryHandler(KlarioDbContext context)
+    public GetJobPostingsQueryHandler(OrbitDbContext context)
     {
         _context = context;
     }

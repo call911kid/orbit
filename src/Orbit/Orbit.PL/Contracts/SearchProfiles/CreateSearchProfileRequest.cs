@@ -1,6 +1,6 @@
-using Klario.Common.Enums;
+using Orbit.Common.Enums;
 
-namespace Klario.PL.Contracts.SearchProfiles;
+namespace Orbit.PL.Contracts.SearchProfiles;
 
 public sealed record CreateSearchProfileRequest(
     string Name,

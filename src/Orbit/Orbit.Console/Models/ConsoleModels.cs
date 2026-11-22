@@ -1,7 +1,7 @@
-using Klario.Common.Enums;
+using Orbit.Common.Enums;
 using System.Text.Json.Serialization;
 
-namespace Klario.Console.Models;
+namespace Orbit.Console.Models;
 
 public sealed class SearchProfileViewModel
 {

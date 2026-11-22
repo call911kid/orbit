@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
-using Klario.BLL.Interfaces;
+using Orbit.BLL.Interfaces;
 
-namespace Klario.BLL.Services;
+namespace Orbit.BLL.Services;
 
 public class TelegramService : ITelegramService
 {

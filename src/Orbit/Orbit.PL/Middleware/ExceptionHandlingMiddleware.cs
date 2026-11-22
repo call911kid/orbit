@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Klario.BLL.Exceptions;
-using Klario.PL.Constants;
-using Klario.PL.Responses;
+using Orbit.BLL.Exceptions;
+using Orbit.PL.Constants;
+using Orbit.PL.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Klario.PL.Middleware
+namespace Orbit.PL.Middleware
 {
     public class ExceptionHandlingMiddleware
     {

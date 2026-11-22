@@ -1,8 +1,8 @@
-using Klario.Providers.Contracts;
-using Klario.Providers.LinkedIn;
+using Orbit.Providers.Contracts;
+using Orbit.Providers.LinkedIn;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Klario.Providers.DI;
+namespace Orbit.Providers.DI;
 
 public static class DependencyInjection
 {

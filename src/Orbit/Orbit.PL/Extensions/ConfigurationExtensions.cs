@@ -1,9 +1,9 @@
-using Klario.PL.Configuration;
+using Orbit.PL.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Klario.PL.Extensions;
+namespace Orbit.PL.Extensions;
 
 public static class ConfigurationExtensions
 {

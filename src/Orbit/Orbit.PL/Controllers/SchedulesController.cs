@@ -1,12 +1,12 @@
-using Klario.BLL.Commands.Schedules;
-using Klario.Common.Enums;
-using Klario.PL.Contracts.Schedules;
-using Klario.PL.Responses;
+using Orbit.BLL.Commands.Schedules;
+using Orbit.Common.Enums;
+using Orbit.PL.Contracts.Schedules;
+using Orbit.PL.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Klario.PL.Controllers;
+namespace Orbit.PL.Controllers;
 
 [Authorize]
 [ApiController]

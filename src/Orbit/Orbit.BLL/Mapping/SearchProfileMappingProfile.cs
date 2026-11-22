@@ -1,9 +1,9 @@
 using AutoMapper;
-using Klario.BLL.Commands.SearchProfiles;
-using Klario.BLL.Queries.SearchProfiles;
-using Klario.DAL.Models;
+using Orbit.BLL.Commands.SearchProfiles;
+using Orbit.BLL.Queries.SearchProfiles;
+using Orbit.DAL.Models;
 
-namespace Klario.BLL.Mapping;
+namespace Orbit.BLL.Mapping;
 
 public class SearchProfileMappingProfile : Profile
 {

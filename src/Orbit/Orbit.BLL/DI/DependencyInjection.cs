@@ -1,10 +1,10 @@
 using FluentValidation;
-using Klario.BLL.Behaviors;
-using Klario.BLL.Interfaces;
-using Klario.BLL.Services;
+using Orbit.BLL.Behaviors;
+using Orbit.BLL.Interfaces;
+using Orbit.BLL.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Klario.BLL.DI;
+namespace Orbit.BLL.DI;
 
 public static class DependencyInjection
 {

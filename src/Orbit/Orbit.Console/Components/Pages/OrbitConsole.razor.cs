@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.JSInterop;
-using Klario.Console.Services;
+using Orbit.Console.Services;
 
-namespace Klario.Console.Components.Pages;
+namespace Orbit.Console.Components.Pages;
 
-public partial class KlarioConsole : ComponentBase, IDisposable
+public partial class OrbitConsole : ComponentBase, IDisposable
 {
     [Inject] private ConsoleState State { get; set; } = default!;
     [Inject] private ProtectedLocalStorage ProtectedLocalStorage { get; set; } = default!;
@@ -25,7 +25,7 @@ public partial class KlarioConsole : ComponentBase, IDisposable
         {
             try
             {
-                var result = await ProtectedLocalStorage.GetAsync<string>("klario_secret_key");
+                var result = await ProtectedLocalStorage.GetAsync<string>("orbit_secret_key");
                 if (result.Success && !string.IsNullOrWhiteSpace(result.Value))
                 {
                     State.SecretKey = result.Value;
@@ -33,7 +33,7 @@ public partial class KlarioConsole : ComponentBase, IDisposable
                     var success = await State.UnlockAsync();
                     if (!success)
                     {
-                        await ProtectedLocalStorage.DeleteAsync("klario_secret_key");
+                        await ProtectedLocalStorage.DeleteAsync("orbit_secret_key");
                     }
                 }
             }
@@ -52,7 +52,7 @@ public partial class KlarioConsole : ComponentBase, IDisposable
     {
         try
         {
-            await JS.InvokeVoidAsync("destroyKlarioTopography", "loginTopoCanvas");
+            await JS.InvokeVoidAsync("destroyOrbitTopography", "loginTopoCanvas");
         }
         catch
         {
@@ -63,7 +63,7 @@ public partial class KlarioConsole : ComponentBase, IDisposable
     {
         try
         {
-            await JS.InvokeVoidAsync("destroyKlarioTopography", "homeTopoCanvas");
+            await JS.InvokeVoidAsync("destroyOrbitTopography", "homeTopoCanvas");
         }
         catch
         {

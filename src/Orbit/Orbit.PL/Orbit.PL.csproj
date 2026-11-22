@@ -21,10 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Klario.BLL/Klario.BLL.csproj" />
-    <ProjectReference Include="../Klario.Common/Klario.Common.csproj" />
-    <ProjectReference Include="../Klario.Console/Klario.Console.csproj" />
-    <ProjectReference Include="../Klario.DAL/Klario.DAL.csproj" />
+    <ProjectReference Include="../Orbit.BLL/Orbit.BLL.csproj" />
+    <ProjectReference Include="../Orbit.Common/Orbit.Common.csproj" />
+    <ProjectReference Include="../Orbit.Console/Orbit.Console.csproj" />
+    <ProjectReference Include="../Orbit.DAL/Orbit.DAL.csproj" />
   </ItemGroup>
 
 

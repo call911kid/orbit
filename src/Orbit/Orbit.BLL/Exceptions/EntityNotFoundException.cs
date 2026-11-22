@@ -1,4 +1,4 @@
-namespace Klario.BLL.Exceptions;
+namespace Orbit.BLL.Exceptions;
 
 public class EntityNotFoundException : Exception
 {

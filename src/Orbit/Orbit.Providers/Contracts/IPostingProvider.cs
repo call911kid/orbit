@@ -1,6 +1,6 @@
-using Klario.Common.Enums;
+using Orbit.Common.Enums;
 
-namespace Klario.Providers.Contracts;
+namespace Orbit.Providers.Contracts;
 
 public interface IPostingProvider
 {

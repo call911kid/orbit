@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using Klario.DAL.Models;
+using Orbit.DAL.Models;
 
-namespace Klario.DAL.Context;
+namespace Orbit.DAL.Context;
 
-public class KlarioDbContext : DbContext
+public class OrbitDbContext : DbContext
 {
-    public KlarioDbContext(DbContextOptions<KlarioDbContext> options) : base(options)
+    public OrbitDbContext(DbContextOptions<OrbitDbContext> options) : base(options)
     {
     }
 
@@ -18,6 +18,6 @@ public class KlarioDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Automatically applies configurations from assembly
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(KlarioDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrbitDbContext).Assembly);
     }
 }

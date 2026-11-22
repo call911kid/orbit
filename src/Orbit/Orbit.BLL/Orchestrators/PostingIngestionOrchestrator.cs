@@ -1,14 +1,14 @@
-using Klario.BLL.Commands.JobPostings;
-using Klario.BLL.Interfaces;
-using Klario.BLL.Queries.ExcludedCompanies;
-using Klario.BLL.Queries.JobPostings;
-using Klario.Common.Enums;
-using Klario.DAL.Context;
-using Klario.Providers.Contracts;
+using Orbit.BLL.Commands.JobPostings;
+using Orbit.BLL.Interfaces;
+using Orbit.BLL.Queries.ExcludedCompanies;
+using Orbit.BLL.Queries.JobPostings;
+using Orbit.Common.Enums;
+using Orbit.DAL.Context;
+using Orbit.Providers.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Klario.BLL.Orchestrators;
+namespace Orbit.BLL.Orchestrators;
 
 public record PostingIngestionOrchestrator(
     Guid ProfileId,
@@ -17,7 +17,7 @@ public record PostingIngestionOrchestrator(
 
 public class PostingIngestionOrchestratorHandler : IRequestHandler<PostingIngestionOrchestrator>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
     private readonly IEnumerable<IPostingProvider> _providers;
     private readonly IMediator _mediator;
     private readonly IPostingAlertFormatter _formatter;
@@ -25,7 +25,7 @@ public class PostingIngestionOrchestratorHandler : IRequestHandler<PostingIngest
     private readonly IPostingMatcher _postingMatcher;
 
     public PostingIngestionOrchestratorHandler(
-        KlarioDbContext context,
+        OrbitDbContext context,
         IEnumerable<IPostingProvider> providers,
         IMediator mediator,
         IPostingAlertFormatter formatter,

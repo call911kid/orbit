@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Klario.Console.Services;
+using Orbit.Console.Services;
 
-namespace Klario.Console.Components.Exclusions;
+namespace Orbit.Console.Components.Exclusions;
 
 public partial class ExcludedCompaniesManager : ComponentBase, IDisposable
 {

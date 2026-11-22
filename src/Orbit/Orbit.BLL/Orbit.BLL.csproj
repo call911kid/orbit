@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Klario.Common/Klario.Common.csproj" />
-    <ProjectReference Include="../Klario.DAL/Klario.DAL.csproj" />
-    <ProjectReference Include="../Klario.Providers/Klario.Providers.csproj" />
+    <ProjectReference Include="../Orbit.Common/Orbit.Common.csproj" />
+    <ProjectReference Include="../Orbit.DAL/Orbit.DAL.csproj" />
+    <ProjectReference Include="../Orbit.Providers/Orbit.Providers.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,11 +1,11 @@
 using AutoMapper;
 using FluentValidation;
-using Klario.DAL.Context;
-using Klario.Common.Enums;
-using Klario.DAL.Models;
+using Orbit.DAL.Context;
+using Orbit.Common.Enums;
+using Orbit.DAL.Models;
 using MediatR;
 
-namespace Klario.BLL.Commands.SearchProfiles;
+namespace Orbit.BLL.Commands.SearchProfiles;
 
 public record CreateSearchProfileCommand(
     string Name,
@@ -22,11 +22,11 @@ public record CreateSearchProfileCommand(
 
 public class CreateSearchProfileCommandHandler : IRequestHandler<CreateSearchProfileCommand, Guid>
 {
-    private readonly KlarioDbContext _context;
+    private readonly OrbitDbContext _context;
     private readonly IMapper _mapper;
 
     public CreateSearchProfileCommandHandler(
-        KlarioDbContext context,
+        OrbitDbContext context,
         IMapper mapper)
     {
         _context = context;

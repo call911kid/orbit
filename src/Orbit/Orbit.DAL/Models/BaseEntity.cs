@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Klario.DAL.Models
+namespace Orbit.DAL.Models
 {
     public class BaseEntity
     {

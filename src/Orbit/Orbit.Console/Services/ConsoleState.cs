@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Components;
-using Klario.Common.Enums;
-using Klario.Console.Models;
+using Orbit.Common.Enums;
+using Orbit.Console.Models;
 
-namespace Klario.Console.Services;
+namespace Orbit.Console.Services;
 
 public sealed class ConsoleState
 {
-    private readonly KlarioApiClient _apiClient;
+    private readonly OrbitApiClient _apiClient;
 
-    public ConsoleState(KlarioApiClient apiClient, NavigationManager? navigationManager = null)
+    public ConsoleState(OrbitApiClient apiClient, NavigationManager? navigationManager = null)
     {
         _apiClient = apiClient;
         if (navigationManager != null && !string.IsNullOrWhiteSpace(navigationManager.BaseUri))
@@ -100,7 +100,7 @@ public sealed class ConsoleState
             }
 
             IsUnlocked = true;
-            ShowToast("Connected to Klario.");
+            ShowToast("Connected to Orbit.");
             return true;
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)

@@ -1,12 +1,12 @@
-using Klario.Console.Components;
-using Klario.PL.Configuration;
+using Orbit.Console.Components;
+using Orbit.PL.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace Klario.PL.Extensions;
+namespace Orbit.PL.Extensions;
 
 public static class ConsoleExtensions
 {
-    public static WebApplication MapKlarioConsole(this WebApplication app)
+    public static WebApplication MapOrbitConsole(this WebApplication app)
     {
         var options = app.Services.GetRequiredService<IOptions<ConsoleOptions>>().Value;
         if (!options.Enabled)

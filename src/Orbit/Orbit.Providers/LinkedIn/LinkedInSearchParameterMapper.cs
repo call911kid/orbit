@@ -1,6 +1,6 @@
-using Klario.Common.Enums;
+using Orbit.Common.Enums;
 
-namespace Klario.Providers.LinkedIn;
+namespace Orbit.Providers.LinkedIn;
 
 internal static class LinkedInSearchParameterMapper
 {
