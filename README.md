@@ -1,6 +1,6 @@
-# Klario
+# Orbit
 
-Klario is a self-hosted job monitoring platform designed to run on your own server. It continuously tracks openings across multiple hiring sources, filters postings based on your exact career preferences, and delivers real-time alerts the moment matching opportunities are published. It began as a learning project and evolved into a personal monitoring service.
+Orbit is a self-hosted job monitoring platform designed to run on your own server. It continuously tracks openings across multiple hiring sources, filters postings based on your exact career preferences, and delivers real-time alerts the moment matching opportunities are published. It began as a learning project and evolved into a personal monitoring service.
 
 ## Prerequisites
 
@@ -11,15 +11,15 @@ Klario is a self-hosted job monitoring platform designed to run on your own serv
 
 ### 1. Configure Settings
 
-Copy `appsettings.example` to `src/Klario/Klario.PL/appsettings.json`:
+Copy `appsettings.example` to `src/Orbit/Orbit.PL/appsettings.json`:
 
 ```powershell
-Copy-Item appsettings.example src/Klario/Klario.PL/appsettings.json
+Copy-Item appsettings.example src/Orbit/Orbit.PL/appsettings.json
 ```
 
 Update `DefaultConnection` in `appsettings.json`:
-- LocalDB: `Server=(localdb)\\mssqllocaldb;Database=KlarioDb;Trusted_Connection=True;MultipleActiveResultSets=true;`
-- Local instance: `Server=localhost;Database=KlarioDb;Trusted_Connection=True;TrustServerCertificate=True;`
+- LocalDB: `Server=(localdb)\\mssqllocaldb;Database=OrbitDb;Trusted_Connection=True;MultipleActiveResultSets=true;`
+- Local instance: `Server=localhost;Database=OrbitDb;Trusted_Connection=True;TrustServerCertificate=True;`
 
 Set `Authentication:ApiKey` to your preferred key.
 
@@ -28,7 +28,7 @@ Set `Authentication:ApiKey` to your preferred key.
 ### 2. Run Application
 
 ```powershell
-dotnet run --project src/Klario/Klario.PL/Klario.PL.csproj
+dotnet run --project src/Orbit/Orbit.PL/Orbit.PL.csproj
 ```
 
 Available endpoints:
