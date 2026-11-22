@@ -1,0 +1,65 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentValidation;
+using Orbit.DAL.Context;
+using Orbit.DAL.Models;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Orbit.BLL.Commands.ExcludedCompanies;
+
+public record CreateExcludedCompanyCommand(string Name) : IRequest<Guid>;
+
+public class CreateExcludedCompanyCommandHandler : IRequestHandler<CreateExcludedCompanyCommand, Guid>
+{
+    private readonly OrbitDbContext _context;
+
+    public CreateExcludedCompanyCommandHandler(OrbitDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<Guid> Handle(CreateExcludedCompanyCommand request, CancellationToken cancellationToken)
+    {
+        var displayName = request.Name.Trim();
+        var normalized = displayName.ToLowerInvariant();
+
+        // if existing record exists (including soft-deleted)
+        var existing = await _context.ExcludedCompanies
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(c => c.NormalizedName == normalized, cancellationToken);
+
+        if (existing is not null)
+        {
+            if (existing.IsDeleted)
+            {
+                existing.IsDeleted = false;
+                existing.Name = displayName;
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            return existing.Id;
+        }
+
+        var entity = new ExcludedCompany
+        {
+            Name = displayName,
+            NormalizedName = normalized
+        };
+
+        _context.ExcludedCompanies.Add(entity);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return entity.Id;
+    }
+}
+
+public class CreateExcludedCompanyCommandValidator : AbstractValidator<CreateExcludedCompanyCommand>
+{
+    public CreateExcludedCompanyCommandValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("Name is required.")
+            .MaximumLength(200).WithMessage("Name must not exceed 200 characters.");
+    }
+}
