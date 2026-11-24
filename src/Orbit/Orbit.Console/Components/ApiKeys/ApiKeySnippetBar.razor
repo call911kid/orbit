@@ -1,0 +1,24 @@
+@namespace Orbit.Console.Components.ApiKeys
+
+<div class="mb-5 pb-3.5 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+    <div class="flex items-center gap-4 font-sans font-semibold text-xs shrink-0">
+        @foreach (var mode in Modes)
+        {
+            var isActive = activeMode == mode.Key;
+            <button type="button"
+                    @key="mode.Key"
+                    @onclick="() => SelectMode(mode.Key)"
+                    class="pb-1 border-b-2 transition-colors cursor-pointer @(isActive ? "border-[#0f766e] text-slate-900" : "border-transparent text-slate-400 hover:text-slate-700")">
+                @mode.Label
+            </button>
+        }
+    </div>
+
+    <code class="text-[11px] bg-slate-100/80 px-2.5 py-1 rounded-md text-slate-800 truncate flex-1 select-all">@CurrentSnippet</code>
+
+    <button type="button"
+            @onclick="CopyCurrentAsync"
+            class="px-2.5 py-1 rounded-md text-[#0f766e] hover:bg-teal-50 font-sans font-semibold text-xs transition-colors cursor-pointer shrink-0">
+        @(justCopied ? "Copied!" : "Copy")
+    </button>
+</div>

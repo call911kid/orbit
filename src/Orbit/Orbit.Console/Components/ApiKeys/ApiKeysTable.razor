@@ -1,0 +1,105 @@
+@namespace Orbit.Console.Components.ApiKeys
+
+<div class="overflow-x-auto border border-slate-200 rounded-xl bg-white shadow-2xs">
+    <table class="w-full text-left text-xs font-mono table-fixed divide-y divide-slate-200">
+        <thead class="bg-slate-50 text-slate-400 uppercase text-[11px] tracking-wider">
+            <tr>
+                <th class="py-2.5 px-3.5 w-60">Key Name</th>
+                <th class="py-2.5 px-3 w-24">Role</th>
+                <th class="py-2.5 px-3 w-36">Prefix Hint</th>
+                <th class="py-2.5 px-3 w-40">Expiration</th>
+                <th class="py-2.5 px-3 w-32">Last Used</th>
+                <th class="py-2.5 px-3 w-36 text-right">Action</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+            @if (IsLoading)
+            {
+                <tr>
+                    <td colspan="6" class="py-8 text-center text-slate-400 font-mono text-xs">
+                        <span class="inline-block w-2 h-2 rounded-full bg-[#0f766e] animate-ping mr-2"></span>
+                        Loading API keys...
+                    </td>
+                </tr>
+            }
+            else if (!string.IsNullOrWhiteSpace(ErrorMessage))
+            {
+                <tr>
+                    <td colspan="6" class="py-8 text-center text-rose-600 font-mono text-xs">
+                        <span>@ErrorMessage</span>
+                        <button type="button"
+                                @onclick="OnRetry"
+                                class="ml-3 px-2.5 py-1 rounded border border-rose-200 hover:bg-rose-50 font-semibold cursor-pointer">
+                            Retry
+                        </button>
+                    </td>
+                </tr>
+            }
+            else if (Keys.Count == 0)
+            {
+                <tr>
+                    <td colspan="6" class="py-8 text-center text-slate-400 font-mono text-xs">
+                        No API keys registered. Generate one above to grant agent or guest access.
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var key in Keys)
+                {
+                    var isAgent = key.Role == Role.Agent;
+                    var isExpired = key.ExpiresAt <= DateTime.UtcNow;
+                    var isConfirming = pendingRevokeId == key.Id;
+
+                    <tr @key="key.Id" class="@(isExpired ? "opacity-65 bg-slate-50/40" : "hover:bg-slate-50/70") transition-colors">
+                        <td class="py-3 px-3.5">
+                            <span class="font-bold text-slate-900 font-sans block truncate" title="@key.Name">@key.Name</span>
+                            <div class="text-[10px] text-slate-400">Created: @FormatDate(key.CreatedAt)</div>
+                        </td>
+                        <td class="py-3 px-3">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded font-mono text-[10px] font-semibold @(isAgent ? "bg-teal-100 text-teal-800" : "bg-slate-100 text-slate-700")">
+                                @key.Role
+                            </span>
+                        </td>
+                        <td class="py-3 px-3 font-mono text-slate-600">
+                            <span class="bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded text-[11px]">@key.KeyPrefix...</span>
+                        </td>
+                        <td class="py-3 px-3 font-mono text-slate-700">
+                            <span class="@(isExpired ? "text-rose-600" : "text-teal-700") font-medium">@ApiKeyDisplayHelper.FormatTimeLeft(key.ExpiresAt)</span>
+                            <div class="text-[10px] text-slate-400">@FormatDate(key.ExpiresAt)</div>
+                        </td>
+                        <td class="py-3 px-3 font-mono text-slate-500">
+                            @ApiKeyDisplayHelper.FormatLastUsed(key.LastUsedAt)
+                        </td>
+                        <td class="py-3 px-3 text-right">
+                            @if (isConfirming)
+                            {
+                                <div class="inline-flex items-center gap-1.5">
+                                    <button type="button"
+                                            disabled="@(revokingId == key.Id)"
+                                            @onclick="() => ConfirmRevokeAsync(key.Id)"
+                                            class="text-[11px] px-2 py-1 rounded bg-rose-600 hover:bg-rose-700 text-white font-semibold cursor-pointer">
+                                        Confirm
+                                    </button>
+                                    <button type="button"
+                                            @onclick="CancelRevoke"
+                                            class="text-[11px] px-2 py-1 rounded border border-slate-200 text-slate-500 hover:bg-slate-100 cursor-pointer">
+                                        Cancel
+                                    </button>
+                                </div>
+                            }
+                            else
+                            {
+                                <button type="button"
+                                        @onclick="() => RequestRevoke(key.Id)"
+                                        class="text-xs px-2.5 py-1 rounded border border-rose-200 text-rose-600 hover:bg-rose-50 font-semibold cursor-pointer">
+                                    Revoke
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

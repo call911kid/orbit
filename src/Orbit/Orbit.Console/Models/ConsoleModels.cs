@@ -124,3 +124,23 @@ public sealed record JobPostingDto(
     DateTime CreatedAt,
     bool IsCompanyBlocked = false
 );
+
+public sealed record ApiKeyItemModel(
+    Guid Id,
+    string Name,
+    string KeyPrefix,
+    Role Role,
+    DateTime ExpiresAt,
+    DateTime? LastUsedAt,
+    DateTime CreatedAt
+);
+
+public sealed record CreatedApiKeyModel(
+    Guid Id,
+    string Name,
+    string RawKey,
+    string KeyPrefix,
+    Role Role,
+    DateTime ExpiresAt,
+    DateTime CreatedAt
+);
