@@ -216,4 +216,67 @@ public sealed class OrbitApiClient
         var response = await client.GetFromJsonAsync<ApiEnvelope<PagedResponse<JobPostingDto>>>(url, JsonOptions);
         return response?.Data ?? new PagedResponse<JobPostingDto>([], page, pageSize, 0);
     }
+
+    public async Task<List<ApiKeyItemModel>> GetApiKeysAsync(string baseUrl, string apiKey, CancellationToken cancellationToken = default)
+    {
+        var client = CreateClient(baseUrl, apiKey);
+        var response = await client.GetFromJsonAsync<ApiEnvelope<List<ApiKeyItemModel>>>("api/api-keys", JsonOptions, cancellationToken);
+        return response?.Data ?? [];
+    }
+
+    public async Task<CreatedApiKeyModel?> CreateApiKeyAsync(
+        string baseUrl,
+        string apiKey,
+        string name,
+        Role role,
+        int validForMinutes,
+        CancellationToken cancellationToken = default)
+    {
+        var client = CreateClient(baseUrl, apiKey);
+        var payload = new { name, role, validForMinutes };
+        var response = await client.PostAsJsonAsync("api/api-keys", payload, JsonOptions, cancellationToken);
+        await EnsureSuccessOrThrowAsync(response, cancellationToken);
+
+        var result = await response.Content.ReadFromJsonAsync<ApiEnvelope<CreatedApiKeyModel>>(JsonOptions, cancellationToken);
+        return result?.Data;
+    }
+
+    public async Task RevokeApiKeyAsync(string baseUrl, string apiKey, Guid id, CancellationToken cancellationToken = default)
+    {
+        var client = CreateClient(baseUrl, apiKey);
+        var response = await client.DeleteAsync($"api/api-keys/{id}", cancellationToken);
+        await EnsureSuccessOrThrowAsync(response, cancellationToken);
+    }
+
+    private static async Task EnsureSuccessOrThrowAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+    {
+        if (response.IsSuccessStatusCode)
+        {
+            return;
+        }
+
+        string? errorMessage = null;
+        try
+        {
+            var errorBody = await response.Content.ReadFromJsonAsync<ApiEnvelope<object>>(JsonOptions, cancellationToken);
+            if (errorBody?.Errors is { Count: > 0 })
+            {
+                errorMessage = string.Join(" ", errorBody.Errors);
+            }
+            else if (!string.IsNullOrWhiteSpace(errorBody?.Message))
+            {
+                errorMessage = errorBody.Message;
+            }
+        }
+        catch
+        {
+        }
+
+        if (!string.IsNullOrWhiteSpace(errorMessage))
+        {
+            throw new InvalidOperationException(errorMessage);
+        }
+
+        response.EnsureSuccessStatusCode();
+    }
 }

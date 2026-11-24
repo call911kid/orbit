@@ -1,0 +1,18 @@
+@namespace Orbit.Console.Components.ApiKeys
+
+<div class="p-6 w-full">
+    <ApiKeySnippetBar BaseUrl="@State.ServerUrl" OnCopy="HandleCopySnippetAsync" />
+
+    <ApiKeyCreateForm IsBusy="isCreating" OnCreate="HandleCreateKeyAsync" />
+
+    <ApiKeysTable Keys="State.ApiKeys"
+                  IsLoading="isLoading"
+                  ErrorMessage="@loadError"
+                  UserTimeZone="State.UserTimeZone"
+                  OnRetry="LoadApiKeysAsync"
+                  OnRevoke="HandleRevokeKeyAsync" />
+</div>
+
+<ApiKeyRevealDialog CreatedKey="newlyCreatedKey"
+                    OnCopy="HandleCopyRawKeyAsync"
+                    OnClose="HandleCloseRevealDialog" />

@@ -12,6 +12,7 @@ public static class ConsoleServiceExtensions
             .AddInteractiveServerComponents();
         services.AddHttpClient();
         services.AddScoped<ProtectedLocalStorage>();
+        services.AddScoped<ClipboardService>();
         services.AddScoped<OrbitApiClient>();
         services.AddScoped<ConsoleState>();
         return services;

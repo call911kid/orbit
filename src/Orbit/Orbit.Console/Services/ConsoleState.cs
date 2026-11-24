@@ -35,6 +35,7 @@ public sealed class ConsoleState
 
     public List<SearchProfileViewModel> Profiles { get; private set; } = [];
     public List<ExcludedCompanyModel> ExcludedCompanies { get; private set; } = [];
+    public List<ApiKeyItemModel> ApiKeys { get; private set; } = [];
     public JobPostingStatsModel JobStats { get; private set; } = new(0, 0, 0);
     public SearchProfileViewModel? SelectedProfile { get; set; }
     public TimeZoneInfo? UserTimeZone { get; set; }
@@ -88,6 +89,7 @@ public sealed class ConsoleState
         {
             Profiles = await _apiClient.GetProfilesAsync(ServerUrl, SecretKey);
             ExcludedCompanies = await _apiClient.GetExcludedCompaniesAsync(ServerUrl, SecretKey);
+            ApiKeys = await _apiClient.GetApiKeysAsync(ServerUrl, SecretKey);
             JobStats = await _apiClient.GetJobPostingStatsAsync(ServerUrl, SecretKey);
 
             if (Profiles.Count == 0)
@@ -131,6 +133,7 @@ public sealed class ConsoleState
         IsUnlocked = false;
         SecretKey = string.Empty;
         GateError = string.Empty;
+        ApiKeys = [];
         NotifyStateChanged();
     }
 
@@ -571,6 +574,43 @@ public sealed class ConsoleState
         catch
         {
         }
+    }
+
+    public async Task RefreshApiKeysAsync(CancellationToken cancellationToken = default)
+    {
+        ApiKeys = await _apiClient.GetApiKeysAsync(ServerUrl, SecretKey, cancellationToken);
+        NotifyStateChanged();
+    }
+
+    public async Task<CreatedApiKeyModel?> CreateApiKeyAsync(
+        string name,
+        Role role,
+        int validForMinutes,
+        CancellationToken cancellationToken = default)
+    {
+        var created = await _apiClient.CreateApiKeyAsync(ServerUrl, SecretKey, name.Trim(), role, validForMinutes, cancellationToken);
+        if (created is not null)
+        {
+            ApiKeys.Insert(0, new ApiKeyItemModel(
+                created.Id,
+                created.Name,
+                created.KeyPrefix,
+                created.Role,
+                created.ExpiresAt,
+                LastUsedAt: null,
+                created.CreatedAt));
+            NotifyStateChanged();
+        }
+
+        return created;
+    }
+
+    public async Task RevokeApiKeyAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        await _apiClient.RevokeApiKeyAsync(ServerUrl, SecretKey, id, cancellationToken);
+        ApiKeys.RemoveAll(k => k.Id == id);
+        ShowToast("API key revoked.");
+        NotifyStateChanged();
     }
 
     public void NotifyStateChanged() => OnChange?.Invoke();
