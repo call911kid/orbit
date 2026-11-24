@@ -1,5 +1,8 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using MediatR;
+using Orbit.BLL.Queries.ApiKeys;
+using Orbit.Common.Enums;
 using Orbit.PL.Configuration;
 using Orbit.PL.Constants;
 using Orbit.PL.Responses;
@@ -20,40 +23,61 @@ public class ApiKeyAuthenticationOptions : AuthenticationSchemeOptions
 public class ApiKeyAuthenticationHandler : AuthenticationHandler<ApiKeyAuthenticationOptions>
 {
     private readonly ApiAuthenticationOptions _authOptions;
+    private readonly ISender _sender;
 
     public ApiKeyAuthenticationHandler(
         IOptionsMonitor<ApiKeyAuthenticationOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
-        IOptions<ApiAuthenticationOptions> authOptions)
+        IOptions<ApiAuthenticationOptions> authOptions,
+        ISender sender)
         : base(options, logger, encoder)
     {
         _authOptions = authOptions.Value;
+        _sender = sender;
     }
 
-    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+    protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        if (!Request.Headers.TryGetValue(ApiKeyAuthenticationOptions.HeaderName, out var extractedApiKey))
+        if (!Request.Headers.TryGetValue(ApiKeyAuthenticationOptions.HeaderName, out var extractedApiKey) ||
+            string.IsNullOrWhiteSpace(extractedApiKey))
         {
-            return Task.FromResult(AuthenticateResult.NoResult());
+            return AuthenticateResult.NoResult();
         }
 
-        var configuredKey = _authOptions.ApiKey;
-        if (string.IsNullOrEmpty(configuredKey) || !string.Equals(configuredKey, extractedApiKey))
+        var incomingKey = extractedApiKey.ToString();
+
+        // 1. Check Master Admin Key from configuration
+        var masterKey = _authOptions.ApiKey;
+        if (!string.IsNullOrEmpty(masterKey) && string.Equals(masterKey, incomingKey))
         {
-            return Task.FromResult(AuthenticateResult.Fail("Invalid API key."));
+            var adminClaims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, Roles.Admin),
+                new Claim(ClaimTypes.Name, Roles.Admin),
+                new Claim(ClaimTypes.Role, Roles.Admin)
+            };
+            var adminIdentity = new ClaimsIdentity(adminClaims, Scheme.Name);
+            var adminPrincipal = new ClaimsPrincipal(adminIdentity);
+            return AuthenticateResult.Success(new AuthenticationTicket(adminPrincipal, Scheme.Name));
         }
 
-        var claims = new[]
+        // 2. Check Database-backed API Keys
+        var (isValid, keyId, name, role) = await _sender.Send(new ValidateApiKeyQuery(incomingKey));
+        if (isValid)
         {
-            new Claim(ClaimTypes.NameIdentifier, "ApiKeyUser"),
-            new Claim(ClaimTypes.Name, "ApiKeyUser")
-        };
-        var identity = new ClaimsIdentity(claims, Scheme.Name);
-        var principal = new ClaimsPrincipal(identity);
-        var ticket = new AuthenticationTicket(principal, Scheme.Name);
+            var callerClaims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, keyId.ToString()),
+                new Claim(ClaimTypes.Name, name),
+                new Claim(ClaimTypes.Role, role.ToString())
+            };
+            var callerIdentity = new ClaimsIdentity(callerClaims, Scheme.Name);
+            var callerPrincipal = new ClaimsPrincipal(callerIdentity);
+            return AuthenticateResult.Success(new AuthenticationTicket(callerPrincipal, Scheme.Name));
+        }
 
-        return Task.FromResult(AuthenticateResult.Success(ticket));
+        return AuthenticateResult.Fail("Invalid API key.");
     }
 
     protected override async Task HandleChallengeAsync(AuthenticationProperties properties)

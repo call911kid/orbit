@@ -12,6 +12,7 @@ public class OrbitDbContext : DbContext
     public DbSet<SearchProfile> SearchProfiles => Set<SearchProfile>();
     public DbSet<JobPosting> JobPostings => Set<JobPosting>();
     public DbSet<ExcludedCompany> ExcludedCompanies => Set<ExcludedCompany>();
+    public DbSet<ApiKey> ApiKeys => Set<ApiKey>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
