@@ -21,6 +21,7 @@ public static class DependencyInjection
         services.AddHttpClient<ITelegramService, TelegramService>();
         services.AddScoped<IPostingAlertFormatter, TelegramPostingAlertFormatter>();
         services.AddScoped<IPostingMatcher, PostingMatcher>();
+        services.AddSingleton<IApiKeyService, ApiKeyService>();
 
         return services;
     }
