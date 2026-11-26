@@ -37,6 +37,10 @@ Available endpoints:
 - Management Console: `https://localhost:7220/console`
 - Health Check: `https://localhost:7220/api/health`
 
+## Guides
+
+- [Telegram Setup](docs/guides/telegram-setup.md) - Get a Telegram bot token and chat ID.
+
 ## Deployment
 
 Detailed deployment guides are available in `docs/deployment/`:
