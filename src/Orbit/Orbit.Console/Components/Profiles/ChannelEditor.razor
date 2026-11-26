@@ -401,11 +401,10 @@
                 </div>
                 <h3 class="text-sm font-bold text-slate-900 mb-1">No Channel Selected</h3>
                 <p class="text-xs text-slate-500 mb-4">Select an existing monitoring channel from the sidebar or start a new search profile.</p>
-                <button type="button" 
-                        class="text-xs px-4 py-2 rounded-lg bg-[#0f766e] hover:bg-[#115e59] text-white font-semibold shadow-xs transition-colors cursor-pointer" 
-                        @onclick="() => State.CreateNewProfile()">
+                <a href="@ConsoleUrls.NewChannel"
+                   class="inline-block text-xs px-4 py-2 rounded-lg bg-[#0f766e] hover:bg-[#115e59] text-white font-semibold shadow-xs transition-colors cursor-pointer no-underline">
                     + Create New Channel
-                </button>
+                </a>
             </div>
         </div>
     }

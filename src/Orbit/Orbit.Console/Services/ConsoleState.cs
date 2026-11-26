@@ -24,7 +24,6 @@ public sealed class ConsoleState
     public string GateError { get; set; } = string.Empty;
     public bool RememberKey { get; set; } = true;
 
-    public string ActiveTab { get; set; } = "profiles";
     public string SearchFilter { get; set; } = string.Empty;
     public string ToastMessage { get; private set; } = string.Empty;
     public string? ToastActionText { get; private set; }
@@ -37,7 +36,7 @@ public sealed class ConsoleState
     public List<ExcludedCompanyModel> ExcludedCompanies { get; private set; } = [];
     public List<ApiKeyItemModel> ApiKeys { get; private set; } = [];
     public JobPostingStatsModel JobStats { get; private set; } = new(0, 0, 0);
-    public SearchProfileViewModel? SelectedProfile { get; set; }
+    public SearchProfileViewModel? SelectedProfile { get; private set; }
     public TimeZoneInfo? UserTimeZone { get; set; }
 
     public IReadOnlyList<SearchProfileViewModel> FilteredProfiles =>
@@ -46,12 +45,7 @@ public sealed class ConsoleState
             : Profiles.Where(p => p.Name.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase)).ToList();
 
     public event Action? OnChange;
-
-    public void SetActiveTab(string tab)
-    {
-        ActiveTab = tab;
-        NotifyStateChanged();
-    }
+    public event Action<SearchProfileViewModel>? OnProfileRestored;
 
     public void SetSearchFilter(string filter)
     {
@@ -59,10 +53,29 @@ public sealed class ConsoleState
         NotifyStateChanged();
     }
 
-    public void SelectProfile(SearchProfileViewModel? profile)
+    public void SetSelectedProfile(SearchProfileViewModel? profile, bool notify = false)
     {
         SelectedProfile = profile;
-        NotifyStateChanged();
+        if (notify)
+        {
+            NotifyStateChanged();
+        }
+    }
+
+    public SearchProfileViewModel EnsureNewProfileDraft(bool notify = true)
+    {
+        var existingDraft = Profiles.FirstOrDefault(p => p.Id == Guid.Empty);
+        if (existingDraft is not null)
+        {
+            SelectedProfile = existingDraft;
+            if (notify)
+            {
+                NotifyStateChanged();
+            }
+            return existingDraft;
+        }
+
+        return CreateNewProfile(notify);
     }
 
     public async Task<bool> UnlockAsync()
@@ -137,7 +150,7 @@ public sealed class ConsoleState
         NotifyStateChanged();
     }
 
-    public void CreateNewProfile()
+    public SearchProfileViewModel CreateNewProfile(bool notify = true)
     {
         var fresh = new SearchProfileViewModel
         {
@@ -164,7 +177,11 @@ public sealed class ConsoleState
         };
         Profiles.Insert(0, fresh);
         SelectedProfile = fresh;
-        NotifyStateChanged();
+        if (notify)
+        {
+            NotifyStateChanged();
+        }
+        return fresh;
     }
 
     public async Task<bool> SaveProfileAsync(SearchProfileViewModel profile)
@@ -267,6 +284,7 @@ public sealed class ConsoleState
                 SelectedProfile = profile;
                 ShowToast($"Restored '{profile.Name}'.");
                 NotifyStateChanged();
+                OnProfileRestored?.Invoke(profile);
                 return Task.CompletedTask;
             },
             durationMs: 5000);

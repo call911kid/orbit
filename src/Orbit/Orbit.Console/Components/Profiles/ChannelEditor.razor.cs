@@ -13,6 +13,8 @@ public partial class ChannelEditor : ComponentBase, IDisposable
     [Inject] private IJSRuntime JS { get; set; } = default!;
 
     [Parameter] public SearchProfileViewModel? Profile { get; set; }
+    [Parameter] public EventCallback<Guid> OnSaved { get; set; }
+    [Parameter] public EventCallback OnDeleted { get; set; }
 
     private SearchProfileViewModel? _trackedProfile;
     private ProfileSnapshot? _savedSnapshot;
@@ -133,11 +135,16 @@ public partial class ChannelEditor : ComponentBase, IDisposable
     private async Task SaveCurrentProfileAsync()
     {
         if (Profile is null || !HasUnsavedChanges) return;
+        var wasNew = Profile.Id == Guid.Empty;
         var ok = await State.SaveProfileAsync(Profile);
         if (ok && Profile.Id != Guid.Empty)
         {
             _trackedProfile = Profile;
             _savedSnapshot = ProfileSnapshot.From(Profile);
+            if (wasNew)
+            {
+                await OnSaved.InvokeAsync(Profile.Id);
+            }
             StateHasChanged();
         }
     }
@@ -152,6 +159,7 @@ public partial class ChannelEditor : ComponentBase, IDisposable
     {
         if (Profile is null) return;
         await State.DeleteProfileAsync(Profile);
+        await OnDeleted.InvokeAsync();
     }
 
     private async Task AddScheduleAsync(PostingSource source)

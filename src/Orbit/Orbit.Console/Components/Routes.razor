@@ -1,6 +1,6 @@
 <Router AppAssembly="typeof(Routes).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="routeData" />
+        <RouteView RouteData="routeData" DefaultLayout="typeof(ConsoleLayout)" />
         <FocusOnNavigate RouteData="routeData" Selector="h1,h2" />
     </Found>
     <NotFound>

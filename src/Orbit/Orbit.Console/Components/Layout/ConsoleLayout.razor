@@ -1,6 +1,5 @@
-@page "/"
-@page "/console"
-@rendermode InteractiveServer
+@namespace Orbit.Console.Components.Layout
+@inherits LayoutComponentBase
 
 @if (!State.IsUnlocked)
 {
@@ -26,26 +25,7 @@ else
 
         <div class="relative z-10 w-full max-w-6xl bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
             <ConsoleHeader OnLocked="HandleLockedAsync" />
-
-            @if (State.ActiveTab == "profiles")
-            {
-                <div class="grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
-                    <ChannelList />
-                    <ChannelEditor Profile="@State.SelectedProfile" />
-                </div>
-            }
-            else if (State.ActiveTab == "exclusions")
-            {
-                <ExcludedCompaniesManager />
-            }
-            else if (State.ActiveTab == "jobs")
-            {
-                <JobPostingsManager />
-            }
-            else if (State.ActiveTab == "api-keys")
-            {
-                <ApiKeysManager />
-            }
+            @Body
         </div>
     </div>
 }
