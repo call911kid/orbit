@@ -83,7 +83,13 @@ public class PostingIngestionOrchestratorHandler : IRequestHandler<PostingIngest
         if (newPostings.Count == 0)
             return;
 
-        var candidateCompanies = newPostings
+        var createCommand = new CreateJobPostingsCommand(newPostings);
+        var insertedPostings = await _mediator.Send(createCommand, cancellationToken);
+
+        if (insertedPostings.Count == 0)
+            return;
+
+        var candidateCompanies = insertedPostings
             .Select(p => p.Company)
             .Distinct()
             .ToList();
@@ -91,18 +97,13 @@ public class PostingIngestionOrchestratorHandler : IRequestHandler<PostingIngest
         var excludedCompaniesQuery = new GetMatchingExcludedCompaniesQuery(candidateCompanies);
         var excludedNames = await _mediator.Send(excludedCompaniesQuery, cancellationToken);
 
-        if (excludedNames.Count > 0)
-        {
-            newPostings.RemoveAll(p => excludedNames.Contains(p.Company.Trim().ToLowerInvariant()));
+        var alertPostings = excludedNames.Count > 0
+            ? insertedPostings
+                .Where(p => !excludedNames.Contains(p.Company.Trim().ToLowerInvariant()))
+                .ToList()
+            : insertedPostings;
 
-            if (newPostings.Count == 0)
-                return;
-        }
-
-        var createCommand = new CreateJobPostingsCommand(newPostings);
-        var insertedPostings = await _mediator.Send(createCommand, cancellationToken);
-
-        foreach (var posting in insertedPostings)
+        foreach (var posting in alertPostings)
         {
             try
             {
