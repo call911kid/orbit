@@ -1,0 +1,13 @@
+@page "/"
+@page "/console"
+@page "/channels"
+@page "/channels/new"
+@page "/channels/{ChannelId:guid}"
+@namespace Orbit.Console.Components.Pages
+
+<div class="grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
+    <ChannelList SelectedProfileId="@ActiveProfile?.Id" />
+    <ChannelEditor Profile="@ActiveProfile"
+                   OnSaved="HandleProfileSaved"
+                   OnDeleted="HandleProfileDeleted" />
+</div>

@@ -7,6 +7,8 @@ public partial class ChannelList : ComponentBase, IDisposable
 {
     [Inject] private ConsoleState State { get; set; } = default!;
 
+    [Parameter] public Guid? SelectedProfileId { get; set; }
+
     protected override void OnInitialized()
     {
         State.OnChange += HandleStateChanged;
@@ -15,11 +17,6 @@ public partial class ChannelList : ComponentBase, IDisposable
     private void OnFilterInput(ChangeEventArgs e)
     {
         State.SetSearchFilter(e.Value?.ToString() ?? string.Empty);
-    }
-
-    private void CreateNewChannel()
-    {
-        State.CreateNewProfile();
     }
 
     private void HandleStateChanged() => InvokeAsync(StateHasChanged);
