@@ -30,3 +30,5 @@ logs/
 *.pubxml.user
 # Worktrees
 .worktrees/
+
+sandbox/
