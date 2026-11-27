@@ -1,6 +1,7 @@
 using AutoMapper;
 using Orbit.BLL.Commands.SearchProfiles;
 using Orbit.BLL.Queries.SearchProfiles;
+using Orbit.Common.Enums;
 using Orbit.PL.Contracts.SearchProfiles;
 using Orbit.PL.Responses;
 using MediatR;
@@ -23,6 +24,7 @@ public class SearchProfilesController : ControllerBase
         _mapper = mapper;
     }
 
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Agent}")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateSearchProfileRequest request)
     {
@@ -51,6 +53,11 @@ public class SearchProfilesController : ControllerBase
         var responses = await _mediator.Send(query);
         var result = _mapper.Map<List<SearchProfileResponse>>(responses);
 
+        if (User.IsInRole(Roles.Guest))
+        {
+            result = result.Select(RedactSecrets).ToList();
+        }
+
         return Ok(ApiResponse.Success(result));
     }
 
@@ -61,12 +68,20 @@ public class SearchProfilesController : ControllerBase
         var response = await _mediator.Send(query);
         var result = _mapper.Map<SearchProfileResponse>(response);
 
+        if (User.IsInRole(Roles.Guest))
+        {
+            result = RedactSecrets(result);
+        }
+
         return Ok(ApiResponse.Success(result));
     }
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateSearchProfileRequest request)
     {
+        // Guest callers cannot read or overwrite the Telegram bot token; empty string preserves the stored token.
+        var botToken = User.IsInRole(Roles.Guest) ? string.Empty : request.BotToken;
+
         var command = new UpdateSearchProfileCommand(
             id,
             request.Name,
@@ -78,7 +93,7 @@ public class SearchProfilesController : ControllerBase
             request.Experience,
             request.JobType,
             request.TelegramChatId,
-            request.BotToken
+            botToken
         );
 
         await _mediator.Send(command);
@@ -86,6 +101,7 @@ public class SearchProfilesController : ControllerBase
         return Ok(ApiResponse.Success());
     }
 
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Agent}")]
     [HttpPut("{id:guid}/status")]
     public async Task<IActionResult> SetStatus(Guid id, [FromBody] SetSearchProfileStatusRequest request)
     {
@@ -95,6 +111,7 @@ public class SearchProfilesController : ControllerBase
         return Ok(ApiResponse.Success());
     }
 
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Agent}")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -103,4 +120,7 @@ public class SearchProfilesController : ControllerBase
 
         return Ok(ApiResponse.Success());
     }
+
+    private static SearchProfileResponse RedactSecrets(SearchProfileResponse response) =>
+        response with { BotToken = string.Empty };
 }

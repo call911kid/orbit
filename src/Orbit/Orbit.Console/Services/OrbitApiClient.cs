@@ -95,7 +95,7 @@ public sealed class OrbitApiClient
         };
 
         var response = await client.PostAsJsonAsync("api/SearchProfiles", payload, JsonOptions);
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessOrThrowAsync(response);
 
         var result = await response.Content.ReadFromJsonAsync<ApiEnvelope<Guid>>(JsonOptions);
         return result?.Data ?? Guid.Empty;
@@ -119,7 +119,7 @@ public sealed class OrbitApiClient
         };
 
         var response = await client.PutAsJsonAsync($"api/SearchProfiles/{model.Id}", payload, JsonOptions);
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessOrThrowAsync(response);
     }
 
     public async Task SetProfileStatusAsync(string baseUrl, string apiKey, Guid id, bool isActive)
@@ -127,14 +127,14 @@ public sealed class OrbitApiClient
         var client = CreateClient(baseUrl, apiKey);
         var payload = new { isActive };
         var response = await client.PutAsJsonAsync($"api/SearchProfiles/{id}/status", payload, JsonOptions);
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessOrThrowAsync(response);
     }
 
     public async Task DeleteProfileAsync(string baseUrl, string apiKey, Guid id)
     {
         var client = CreateClient(baseUrl, apiKey);
         var response = await client.DeleteAsync($"api/SearchProfiles/{id}");
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessOrThrowAsync(response);
     }
 
     public async Task<List<ExcludedCompanyModel>> GetExcludedCompaniesAsync(string baseUrl, string apiKey)
@@ -149,7 +149,7 @@ public sealed class OrbitApiClient
         var client = CreateClient(baseUrl, apiKey);
         var payload = new { name };
         var response = await client.PostAsJsonAsync("api/excluded-companies", payload, JsonOptions);
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessOrThrowAsync(response);
 
         var result = await response.Content.ReadFromJsonAsync<ApiEnvelope<Guid>>(JsonOptions);
         return result?.Data ?? Guid.Empty;
@@ -159,7 +159,7 @@ public sealed class OrbitApiClient
     {
         var client = CreateClient(baseUrl, apiKey);
         var response = await client.DeleteAsync($"api/excluded-companies/{id}");
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessOrThrowAsync(response);
     }
 
     public async Task ConfigureScheduleAsync(string baseUrl, string apiKey, Guid searchProfileId, PostingSource source, int intervalMinutes)
@@ -167,7 +167,7 @@ public sealed class OrbitApiClient
         var client = CreateClient(baseUrl, apiKey);
         var payload = new { intervalMinutes };
         var response = await client.PutAsJsonAsync($"api/search-profiles/{searchProfileId}/schedules/{source}", payload, JsonOptions);
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessOrThrowAsync(response);
     }
 
     public async Task SetScheduleStatusAsync(string baseUrl, string apiKey, Guid searchProfileId, PostingSource source, bool isEnabled)
@@ -175,14 +175,14 @@ public sealed class OrbitApiClient
         var client = CreateClient(baseUrl, apiKey);
         var payload = new { isEnabled };
         var response = await client.PutAsJsonAsync($"api/search-profiles/{searchProfileId}/schedules/{source}/status", payload, JsonOptions);
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessOrThrowAsync(response);
     }
 
     public async Task RemoveScheduleAsync(string baseUrl, string apiKey, Guid searchProfileId, PostingSource source)
     {
         var client = CreateClient(baseUrl, apiKey);
         var response = await client.DeleteAsync($"api/search-profiles/{searchProfileId}/schedules/{source}");
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessOrThrowAsync(response);
     }
 
     public async Task<JobPostingStatsModel> GetJobPostingStatsAsync(string baseUrl, string apiKey)
@@ -220,8 +220,11 @@ public sealed class OrbitApiClient
     public async Task<List<ApiKeyItemModel>> GetApiKeysAsync(string baseUrl, string apiKey, CancellationToken cancellationToken = default)
     {
         var client = CreateClient(baseUrl, apiKey);
-        var response = await client.GetFromJsonAsync<ApiEnvelope<List<ApiKeyItemModel>>>("api/api-keys", JsonOptions, cancellationToken);
-        return response?.Data ?? [];
+        var response = await client.GetAsync("api/api-keys", cancellationToken);
+        await EnsureSuccessOrThrowAsync(response, cancellationToken);
+
+        var result = await response.Content.ReadFromJsonAsync<ApiEnvelope<List<ApiKeyItemModel>>>(JsonOptions, cancellationToken);
+        return result?.Data ?? [];
     }
 
     public async Task<CreatedApiKeyModel?> CreateApiKeyAsync(
@@ -248,7 +251,7 @@ public sealed class OrbitApiClient
         await EnsureSuccessOrThrowAsync(response, cancellationToken);
     }
 
-    private static async Task EnsureSuccessOrThrowAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+    private static async Task EnsureSuccessOrThrowAsync(HttpResponseMessage response, CancellationToken cancellationToken = default)
     {
         if (response.IsSuccessStatusCode)
         {
@@ -274,7 +277,7 @@ public sealed class OrbitApiClient
 
         if (!string.IsNullOrWhiteSpace(errorMessage))
         {
-            throw new InvalidOperationException(errorMessage);
+            throw new HttpRequestException(errorMessage, null, response.StatusCode);
         }
 
         response.EnsureSuccessStatusCode();

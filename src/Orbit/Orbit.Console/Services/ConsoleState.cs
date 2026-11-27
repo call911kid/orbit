@@ -102,8 +102,8 @@ public sealed class ConsoleState
         {
             Profiles = await _apiClient.GetProfilesAsync(ServerUrl, SecretKey);
             ExcludedCompanies = await _apiClient.GetExcludedCompaniesAsync(ServerUrl, SecretKey);
-            ApiKeys = await _apiClient.GetApiKeysAsync(ServerUrl, SecretKey);
             JobStats = await _apiClient.GetJobPostingStatsAsync(ServerUrl, SecretKey);
+            await TryLoadApiKeysAsync();
 
             if (Profiles.Count == 0)
             {
@@ -121,6 +121,11 @@ public sealed class ConsoleState
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
             GateError = "I've seen better attempts.";
+            return false;
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Forbidden)
+        {
+            GateError = "Access denied for this API key role.";
             return false;
         }
         catch (FormatException)
@@ -192,9 +197,11 @@ public sealed class ConsoleState
             return false;
         }
 
+        var isNewProfile = profile.Id == Guid.Empty;
+
         try
         {
-            if (profile.Id == Guid.Empty)
+            if (isNewProfile)
             {
                 var newId = await _apiClient.CreateProfileAsync(ServerUrl, SecretKey, profile);
                 profile.Id = newId;
@@ -206,7 +213,7 @@ public sealed class ConsoleState
                 ShowToast($"Channel '{profile.Name}' saved.");
             }
 
-            if (profile.Id != Guid.Empty && profile.Schedules.Count > 0)
+            if (isNewProfile && profile.Id != Guid.Empty && profile.Schedules.Count > 0)
             {
                 foreach (var schedule in profile.Schedules)
                 {
@@ -598,6 +605,18 @@ public sealed class ConsoleState
     {
         ApiKeys = await _apiClient.GetApiKeysAsync(ServerUrl, SecretKey, cancellationToken);
         NotifyStateChanged();
+    }
+
+    private async Task TryLoadApiKeysAsync()
+    {
+        try
+        {
+            ApiKeys = await _apiClient.GetApiKeysAsync(ServerUrl, SecretKey);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Forbidden)
+        {
+            ApiKeys = [];
+        }
     }
 
     public async Task<CreatedApiKeyModel?> CreateApiKeyAsync(
