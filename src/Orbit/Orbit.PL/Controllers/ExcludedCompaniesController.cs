@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Orbit.BLL.Commands.ExcludedCompanies;
 using Orbit.BLL.Queries.ExcludedCompanies;
+using Orbit.Common.Enums;
 using Orbit.PL.Contracts.ExcludedCompanies;
 using Orbit.PL.Responses;
 using MediatR;
@@ -24,6 +25,7 @@ public class ExcludedCompaniesController : ControllerBase
         _mediator = mediator;
     }
 
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Agent}")]
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromBody] CreateExcludedCompanyRequest request,
@@ -44,6 +46,7 @@ public class ExcludedCompaniesController : ControllerBase
         return Ok(ApiResponse.Success(result));
     }
 
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Agent}")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {

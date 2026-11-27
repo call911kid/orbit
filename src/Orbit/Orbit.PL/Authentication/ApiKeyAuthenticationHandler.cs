@@ -89,4 +89,14 @@ public class ApiKeyAuthenticationHandler : AuthenticationHandler<ApiKeyAuthentic
             "Invalid or missing API key.",
             new List<string>()));
     }
+
+    protected override async Task HandleForbiddenAsync(AuthenticationProperties properties)
+    {
+        Response.StatusCode = StatusCodes.Status403Forbidden;
+        Response.ContentType = "application/json";
+        await Response.WriteAsJsonAsync(ApiResponse.Failure(
+            ErrorCodes.Forbidden,
+            "You do not have permission to perform this action.",
+            new List<string>()));
+    }
 }

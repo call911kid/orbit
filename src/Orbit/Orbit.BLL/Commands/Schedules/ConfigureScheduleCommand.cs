@@ -54,7 +54,6 @@ public class ConfigureScheduleCommandHandler : IRequestHandler<ConfigureSchedule
         else
         {
             schedule.IntervalMinutes = request.IntervalMinutes;
-            schedule.IsEnabled = true;
         }
 
         await _context.SaveChangesAsync(cancellationToken);

@@ -6,5 +6,6 @@ public static class ErrorCodes
     public const string EntityNotFound = "EntityNotFound";
     public const string ValidationFailed = "ValidationFailed";
     public const string Unauthorized = "Unauthorized";
+    public const string Forbidden = "Forbidden";
     public const string BadRequest = "BadRequest";
 }

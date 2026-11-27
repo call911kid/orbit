@@ -34,6 +34,7 @@ public class SchedulesController : ControllerBase
         return Ok(ApiResponse.Success());
     }
 
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Agent}")]
     [HttpPut("{source}/status")]
     public async Task<IActionResult> SetStatus(
         Guid searchProfileId,
@@ -48,6 +49,7 @@ public class SchedulesController : ControllerBase
         return Ok(ApiResponse.Success());
     }
 
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Agent}")]
     [HttpDelete("{source}")]
     public async Task<IActionResult> Remove(
         Guid searchProfileId,
