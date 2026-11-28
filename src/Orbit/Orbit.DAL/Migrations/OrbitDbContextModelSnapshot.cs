@@ -116,11 +116,6 @@ namespace Orbit.DAL.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<string>("ExternalJobId")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -145,13 +140,14 @@ namespace Orbit.DAL.Migrations
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(1000)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
 
-                    b.HasIndex("Source", "ExternalJobId")
+                    b.HasIndex("Source", "Url")
                         .IsUnique();
 
                     b.ToTable("JobPostings");

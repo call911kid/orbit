@@ -7,7 +7,6 @@ namespace Orbit.DAL.Models
 {
     public class JobPosting : BaseEntity
     {
-        public string ExternalJobId { get; set; }
         public string Title { get; set; }
         public string Company { get; set; }
         public string Location { get; set; }
