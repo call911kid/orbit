@@ -113,7 +113,6 @@ public sealed record JobPostingStatsModel(int TodayCount, int WeekCount, int Tot
 
 public sealed record JobPostingDto(
     Guid Id,
-    string ExternalJobId,
     string Title,
     string Company,
     string Location,

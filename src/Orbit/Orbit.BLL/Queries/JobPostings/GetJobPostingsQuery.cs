@@ -20,7 +20,6 @@ public record GetJobPostingsQuery(
 
 public sealed record GetJobPostingsResponse(
     Guid Id,
-    string ExternalJobId,
     string Title,
     string Company,
     string Location,
@@ -77,7 +76,6 @@ public class GetJobPostingsQueryHandler : IRequestHandler<GetJobPostingsQuery, P
             .Take(pageSize)
             .Select(p => new GetJobPostingsResponse(
                 p.Id,
-                p.ExternalJobId,
                 p.Title,
                 p.Company,
                 p.Location,

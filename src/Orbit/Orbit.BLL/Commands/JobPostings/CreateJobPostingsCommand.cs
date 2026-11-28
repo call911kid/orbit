@@ -1,19 +1,28 @@
 using AutoMapper;
-using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Orbit.Common.Enums;
 using Orbit.DAL.Context;
 using Orbit.DAL.Extensions;
 using Orbit.DAL.Models;
-using Orbit.Providers.Contracts;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Orbit.BLL.Commands.JobPostings;
 
-public record CreateJobPostingsCommand(
-    IReadOnlyList<ExternalPosting> Postings
-) : IRequest<IReadOnlyList<ExternalPosting>>;
+public sealed record CreateJobPostingItem(
+    string Title,
+    string Company,
+    string Url,
+    PostingSource Source,
+    string? Location = null,
+    DateTime? PostedAt = null,
+    string? DescriptionSnippet = null
+);
 
-public class CreateJobPostingsCommandHandler : IRequestHandler<CreateJobPostingsCommand, IReadOnlyList<ExternalPosting>>
+public record CreateJobPostingsCommand(
+    IReadOnlyList<CreateJobPostingItem> Postings
+) : IRequest<IReadOnlyList<CreateJobPostingItem>>;
+
+public class CreateJobPostingsCommandHandler : IRequestHandler<CreateJobPostingsCommand, IReadOnlyList<CreateJobPostingItem>>
 {
     private readonly OrbitDbContext _context;
     private readonly IMapper _mapper;
@@ -24,14 +33,17 @@ public class CreateJobPostingsCommandHandler : IRequestHandler<CreateJobPostings
         _mapper = mapper;
     }
 
-    public async Task<IReadOnlyList<ExternalPosting>> Handle(
+    public async Task<IReadOnlyList<CreateJobPostingItem>> Handle(
         CreateJobPostingsCommand request,
         CancellationToken cancellationToken)
     {
-        if (request.Postings.Count == 0)
+        if (request.Postings is not { Count: > 0 })
             return [];
 
-        var pending = _mapper.Map<List<JobPosting>>(request.Postings);
+        var pending = _mapper.Map<List<JobPosting>>(request.Postings)
+            .DistinctBy(p => ToKey(p.Source, p.Url))
+            .ToList();
+
         var inserted = new List<JobPosting>();
 
         while (pending.Count > 0)
@@ -47,34 +59,44 @@ public class CreateJobPostingsCommandHandler : IRequestHandler<CreateJobPostings
             {
                 _context.ChangeTracker.Clear();
 
-                var pendingIds = pending.Select(p => p.ExternalJobId).ToList();
-                var source = pending[0].Source;
+                var sources = pending.Select(p => p.Source).Distinct().ToList();
+                var urls = pending.Select(p => p.Url).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
 
-                var committedIds = await _context.JobPostings
+                var committed = await _context.JobPostings
                     .AsNoTracking()
-                    .Where(jp => jp.Source == source && pendingIds.Contains(jp.ExternalJobId))
-                    .Select(jp => jp.ExternalJobId)
+                    .IgnoreQueryFilters()
+                    .Where(jp => sources.Contains(jp.Source) && urls.Contains(jp.Url))
+                    .Select(jp => new { jp.Source, jp.Url })
                     .ToListAsync(cancellationToken);
 
-                pending = pending
-                    .Where(p => !committedIds.Contains(p.ExternalJobId))
+                var committedKeys = committed
+                    .Select(c => ToKey(c.Source, c.Url))
+                    .ToHashSet();
+
+                var nextPending = pending
+                    .Where(p => !committedKeys.Contains(ToKey(p.Source, p.Url)))
                     .ToList();
+
+                if (nextPending.Count == pending.Count)
+                    throw;
+
+                pending = nextPending;
             }
         }
 
         if (inserted.Count == 0)
             return [];
 
-        var insertedIds = inserted.Select(i => i.ExternalJobId).ToHashSet();
-        return request.Postings.Where(p => insertedIds.Contains(p.ExternalId)).ToList();
-    }
-}
+        var insertedKeys = inserted
+            .Select(i => ToKey(i.Source, i.Url))
+            .ToHashSet();
 
-public class CreateJobPostingsCommandValidator : AbstractValidator<CreateJobPostingsCommand>
-{
-    public CreateJobPostingsCommandValidator()
-    {
-        RuleFor(x => x.Postings)
-            .NotNull().WithMessage("Postings collection cannot be null.");
+        return request.Postings
+            .Where(p => insertedKeys.Contains(ToKey(p.Source, p.Url)))
+            .DistinctBy(p => ToKey(p.Source, p.Url))
+            .ToList();
     }
+
+    private static (PostingSource Source, string Url) ToKey(PostingSource source, string url) =>
+        (source, url.Trim().ToLowerInvariant());
 }

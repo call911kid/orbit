@@ -72,19 +72,44 @@ public class PostingIngestionOrchestratorHandler : IRequestHandler<PostingIngest
         if (matchedPostings.Count == 0)
             return;
 
-        var externalIds = matchedPostings.Select(p => p.ExternalId).ToList();
-        var existingIdsQuery = new GetExistingJobPostingIdsQuery(request.Source, externalIds);
-        var existingIds = await _mediator.Send(existingIdsQuery, cancellationToken);
+        var urls = matchedPostings
+            .Select(p => p.Url.Trim())
+            .ToList();
+
+        var existingUrls = await _mediator.Send(
+            new GetMatchingJobPostingsQuery(request.Source, urls),
+            cancellationToken);
 
         var newPostings = matchedPostings
-            .Where(p => !existingIds.Contains(p.ExternalId))
+            .Where(p => !existingUrls.Contains(p.Url.Trim()))
             .ToList();
 
         if (newPostings.Count == 0)
             return;
 
-        var createCommand = new CreateJobPostingsCommand(newPostings);
-        var insertedPostings = await _mediator.Send(createCommand, cancellationToken);
+        var items = newPostings
+            .Select(p => new CreateJobPostingItem(
+                Title: p.Title,
+                Company: p.Company,
+                Url: p.Url,
+                Source: p.Source,
+                Location: p.Location,
+                PostedAt: p.PostedAt,
+                DescriptionSnippet: p.DescriptionSnippet))
+            .ToList();
+
+        var createdItems = await _mediator.Send(new CreateJobPostingsCommand(items), cancellationToken);
+        if (createdItems.Count == 0)
+            return;
+
+        var createdUrls = createdItems
+            .Select(i => i.Url.Trim())
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var insertedPostings = newPostings
+            .Where(p => createdUrls.Contains(p.Url.Trim()))
+            .DistinctBy(p => p.Url.Trim(), StringComparer.OrdinalIgnoreCase)
+            .ToList();
 
         if (insertedPostings.Count == 0)
             return;
